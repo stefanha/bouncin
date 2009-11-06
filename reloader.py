@@ -4,6 +4,20 @@ import sys
 
 __all__ = ['run', 'Reload']
 
+# A dict for modules to stash state in before being reloaded
+_saved_state = {}
+
+def save_state(modname, state):
+    """Stash a value which will persist across module reload"""
+    _saved_state[modname] = state
+
+def load_state(modname):
+    """Load a value stashed before the module was reloaded
+
+    This function removes the stashed value, successive calls will return
+    None."""
+    return _saved_state.pop(modname, None)
+
 # Note that the reloader module never reloads itself.  It may be possible to
 # reload most of this module but I prefer to keep the code short and simple.
 
@@ -32,4 +46,8 @@ def run(start_modname):
             __import__(start_modname)
             return
         except Reload:
+            # Notify so modules can stash state before being reloaded
+            import events
+            events.notify('pre-reload')
+
             _unload_modules(baseline_modules)
