@@ -46,8 +46,4 @@ def run(start_modname):
             __import__(start_modname)
             return
         except Reload:
-            # Notify so modules can stash state before being reloaded
-            import events
-            events.notify('pre-reload')
-
             _unload_modules(baseline_modules)
