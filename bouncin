@@ -1,0 +1,5 @@
+#!/usr/bin/env python
+import reloader
+
+# The live update reloader needs to wrap the main code
+reloader.run('bouncer')
