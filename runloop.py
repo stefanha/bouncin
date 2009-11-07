@@ -38,6 +38,7 @@ def run():
     
     Return when all I/O is closed."""
     try:
+        _delayfunc(0)
         _scheduler.run()
     except StopRunloop:
         pass
