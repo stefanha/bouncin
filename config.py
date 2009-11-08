@@ -14,7 +14,7 @@ def _get_default_config():
     section = 'bouncer'
     defaults = {
         'modules': '', # TODO
-        'port_range_start': get_random_port(),
+        'port_range_start': _get_random_port(),
     }
 
     cfg = ConfigParser.RawConfigParser()
@@ -23,7 +23,7 @@ def _get_default_config():
         cfg.set(section, option, value)
     return cfg
 
-_cfg = _get_default_config()
+cfg = _get_default_config()
 
 # TODO load config from file
 

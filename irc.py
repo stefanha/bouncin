@@ -4,15 +4,21 @@ See RFC 2812 "Internet Relay Chat: Client Protocol"."""
 
 import re
 
-__all__ = ['Message', 'parse', 'format']
+__all__ = ['Message', 'parse', 'format', 'RPL_WELCOME', 'RPL_YOURHOST', 'RPL_CREATED', 'RPL_MYINFO']
 
 MESSAGE_RE = re.compile(r'(?::([^ ]+) )?([^ ]+)(.*)')
+
+# IRC numeric responses
+RPL_WELCOME     = '001'
+RPL_YOURHOST    = '002'
+RPL_CREATED     = '003'
+RPL_MYINFO      = '004'
 
 class Message(object):
     """An IRC message"""
 
     def __init__(self, command, *params, **kwargs):
-        self.command = command
+        self.command = command.upper()
         self.params = params
         self.prefix = kwargs.get('prefix', '')
 
