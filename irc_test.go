@@ -24,10 +24,6 @@ func TestMessageString(t *testing.T) {
 			Message{"prefix", "command", []string{"one", "two", "three four"}},
 			":prefix command one two :three four"
 		},
-		tcase {
-			Message{Prefix: "prefix", Command: "command"},
-			"asdf"
-		},
 	};
 
 	for i, tc := range cases {
