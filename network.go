@@ -3,6 +3,7 @@ package main
 import (
 	"container/list";
 	"net";
+	"log";
 	"irc";
 )
 
@@ -26,6 +27,7 @@ func (network *Network) acceptor(accepted chan net.Conn) {
 	for {
 		conn, err := network.listen.Accept();
 		if err != nil {
+			log.Stderrf("accept failed\n");
 			// TODO handle error
 			return
 		}
@@ -36,6 +38,7 @@ func (network *Network) acceptor(accepted chan net.Conn) {
 func (network *Network) run() {
 	accepted := make(chan net.Conn, 0);
 	go network.acceptor(accepted);
+	log.Stderrf("network %s listening on %s\n", network.name, network.listen.Addr());
 	for {
 		select {
 		case client := <-accepted:
@@ -47,4 +50,5 @@ func (network *Network) run() {
 func (network *Network) addClient(conn net.Conn) {
 	client := irc.NewConn(conn, nil);
 	network.clients.PushBack(client);
+	log.Stderrf("client connected from %s\n", conn.RemoteAddr());
 }
