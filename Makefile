@@ -7,6 +7,7 @@ GOFILES=\
 pkgdir=pkg/$(GOOS)_$(GOARCH)
 PKGS=\
 		irc\
+		config\
 
 all: $(TARG)
 clean: clean-pkgs
