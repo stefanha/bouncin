@@ -63,7 +63,3 @@ done:
 	m.Params = paramArray.Data();
 	return m;
 }
-
-func Fmt(command string, params ...) string {
-	return "TODO"
-}
