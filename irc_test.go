@@ -2,34 +2,59 @@ package irc
 
 import "testing"
 
+type tcase struct {
+	line string;
+	msg Message;
+};
+var cases = []tcase {
+	tcase {
+		":prefix command one two :three four",
+		Message{"prefix", "command", []string{"one", "two", "three four"}},
+	},
+	tcase {
+		"command",
+		Message{Command: "command"},
+	},
+	tcase {
+		"command :one",
+		Message{Command: "command", Params: []string{"one"}},
+	},
+	tcase {
+		"command one :two",
+		Message{Command: "command", Params: []string{"one", "two"}},
+	},
+	tcase {
+		"com:mand one :two three",
+		Message{Command: "com:mand", Params: []string{"one", "two three"}},
+	},
+};
+
 func TestMessageString(t *testing.T) {
-	type tcase struct {
-		msg Message;
-		expected string;
-	};
-	cases := []tcase {
-		tcase {
-			Message{Command: "command", Params: []string{}},
-			"command"
-		},
-		tcase {
-			Message{Command: "command", Params: []string{"one"}},
-			"command :one"
-		},
-		tcase {
-			Message{Command: "command", Params: []string{"one", "two"}},
-			"command one :two"
-		},
-		tcase {
-			Message{"prefix", "command", []string{"one", "two", "three four"}},
-			":prefix command one two :three four"
-		},
+	for i, tc := range cases {
+		s := tc.msg.String();
+		if s != tc.line {
+			t.Errorf("Case %d: expected \"%s\", got \"%s\"", i, tc.line, s)
+		}
+	}
+}
+
+func TestParse(t *testing.T) {
+	compare := func(a, b *Message) bool {
+		if !(a.Prefix == b.Prefix && a.Command == b.Command && len(a.Params) == len(b.Params)) {
+			return false;
+		}
+		for i, c := range a.Params {
+			if c != b.Params[i] {
+				return false;
+			}
+		}
+		return true;
 	};
 
 	for i, tc := range cases {
-		s := tc.msg.String();
-		if s != tc.expected {
-			t.Errorf("Case %d: expected \"%s\", got \"%s\"", i, tc.expected, s)
+		msg := Parse(tc.line);
+		if msg == nil || !compare(&tc.msg, msg) {
+			t.Errorf("Case %d: expected \"%s\", got \"%s\"", i, &tc.msg, msg);
 		}
 	}
 }
