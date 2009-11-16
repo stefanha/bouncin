@@ -27,7 +27,7 @@ func (network *Network) acceptor(accepted chan net.Conn) {
 	for {
 		conn, err := network.listen.Accept();
 		if err != nil {
-			log.Stderrf("accept failed\n");
+			log.Stderrf("accept failed: %s\n", err);
 			// TODO handle error
 			return
 		}
