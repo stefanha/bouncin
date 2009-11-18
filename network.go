@@ -25,6 +25,7 @@ func newListenConn(listen net.Listener, accept acceptFunc, error errorFunc) *lis
 }
 
 func (l *listenConn) run() {
+	log.Stderrf("listening on %s\n", l.listen.Addr());
 	// TODO a way to shut this down
 	for {
 		conn, err := l.listen.Accept();
