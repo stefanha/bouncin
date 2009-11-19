@@ -9,7 +9,9 @@ PKGS=\
 		irc\
 		runloop\
 		config\
+		plugins\
 		network\
+		admin\
 
 all: $(TARG)
 clean: clean-pkgs
