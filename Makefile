@@ -2,7 +2,6 @@ include $(GOROOT)/src/Make.$(GOARCH)
 
 TARG=bouncin
 GOFILES=\
-		network.go\
 		main.go\
 
 pkgdir=pkg/$(GOOS)_$(GOARCH)
@@ -10,6 +9,7 @@ PKGS=\
 		irc\
 		runloop\
 		config\
+		network\
 
 all: $(TARG)
 clean: clean-pkgs

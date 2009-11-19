@@ -47,10 +47,10 @@ $(pkgdir)/$(TARG).a: package
 	cp _obj/$(TARG).a $@
 
 _go_.$O: $(GOFILES) $(PREREQ)
-	$(GC) -o $@ $(GOFILES)
+	$(GC) -I $(pkgdir) -o $@ $(GOFILES)
 
 _gotest_.$O: $(GOFILES) $(GOTESTFILES) $(PREREQ)
-	$(GC) -o $@ $(GOFILES) $(GOTESTFILES)
+	$(GC) -I $(pkgdir) -o $@ $(GOFILES) $(GOTESTFILES)
 
 _obj/$(TARG).a: _go_.$O $(OFILES)
 	@mkdir -p _obj/$(dir)

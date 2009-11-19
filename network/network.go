@@ -1,4 +1,4 @@
-package main
+package network
 
 import (
 	"os";
@@ -54,7 +54,16 @@ type Network struct {
 	listen		*listenConn;
 }
 
-func NewNetwork(name string, server net.Conn, listen net.Listener) *Network {
+var networks = make(map[string] *Network);
+
+func Add(name string, server net.Conn, listen net.Listener) *Network {
+	// TODO what if network already exists?
+	network := newNetwork(name, server, listen);
+	networks[name] = network;
+	return network;
+}
+
+func newNetwork(name string, server net.Conn, listen net.Listener) *Network {
 	var network *Network;
 
 	accept := func(conn net.Conn) {
