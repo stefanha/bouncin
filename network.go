@@ -6,6 +6,7 @@ import (
 	"net";
 	"log";
 	"irc";
+	"runloop";
 )
 
 
@@ -57,7 +58,7 @@ func NewNetwork(name string, server net.Conn, listen net.Listener) *Network {
 	var network *Network;
 
 	accept := func(conn net.Conn) {
-		CallLater(func() {
+		runloop.CallLater(func() {
 			network.addClient(conn)
 		})
 	};
@@ -77,7 +78,7 @@ func NewNetwork(name string, server net.Conn, listen net.Listener) *Network {
 func (network *Network) addClient(conn net.Conn) {
 	var elem *list.Element;
 	error := func(os.Error) {
-		CallLater(func() {
+		runloop.CallLater(func() {
 			network.removeClient(elem)
 		})
 	};

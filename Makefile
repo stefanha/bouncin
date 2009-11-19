@@ -2,13 +2,13 @@ include $(GOROOT)/src/Make.$(GOARCH)
 
 TARG=bouncin
 GOFILES=\
-		dispatcher.go\
 		network.go\
 		main.go\
 
 pkgdir=pkg/$(GOOS)_$(GOARCH)
 PKGS=\
 		irc\
+		runloop\
 		config\
 
 all: $(TARG)
