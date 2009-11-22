@@ -5,8 +5,9 @@ import (
 	"container/list";
 	"net";
 	"log";
-	"irc";
 	"runloop";
+	"server";
+	"client";
 )
 
 
@@ -49,7 +50,7 @@ func (l *listenConn) Addr() net.Addr {
 
 type Network struct {
 	name		string;
-	server		*irc.Conn;
+	server		*server.Server;
 	clients		*list.List;
 	listen		*listenConn;
 }
@@ -63,7 +64,7 @@ func Add(name string, server net.Conn, listen net.Listener) *Network {
 	return network;
 }
 
-func newNetwork(name string, server net.Conn, listen net.Listener) *Network {
+func newNetwork(name string, serverConn net.Conn, listen net.Listener) *Network {
 	var network *Network;
 
 	accept := func(conn net.Conn) {
@@ -77,27 +78,13 @@ func newNetwork(name string, server net.Conn, listen net.Listener) *Network {
 	};
 
 	l := newListenConn(listen, accept, error);
-
-	// irc.NewConn(server, )
-
-	network = &Network{name, nil, list.New(), l};
+	network = &Network{name, server.New(serverConn), list.New(), l};
 	return network;
 }
 
 func (network *Network) addClient(conn net.Conn) {
-	var elem *list.Element;
-	error := func(os.Error) {
-		runloop.CallLater(func() {
-			network.removeClient(elem)
-		})
-	};
-
-	client := irc.NewConn(conn, func(msg *irc.Message) {log.Stderrf("%#v\n", msg)}, error);
-	elem = network.clients.PushBack(client);
+	// TODO error handler on client for disconnect
+	client := client.New(conn);
+	network.clients.PushBack(client);
 	log.Stderrf("client connected from %s\n", conn.RemoteAddr());
-}
-
-func (network *Network) removeClient(elem *list.Element) {
-	log.Stderrf("client disconnected from %s\n", elem.Value.(*irc.Conn).RemoteAddr());
-	network.clients.Remove(elem);
 }

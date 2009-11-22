@@ -69,6 +69,7 @@ func (conn *Conn) writer() {
 			return
 		}
 
+		log.Stderrf("-> %s: %s\n", conn.conn.RemoteAddr(), line);
 		_, err := io.WriteString(conn.conn, line + "\r\n");
 		if err != nil {
 			conn.error <- err;
@@ -89,6 +90,7 @@ func (conn *Conn) run() {
 		case line := <-conn.recvq:
 			if conn.recvFunc != nil {
 				msg := Parse(line);
+				log.Stderrf("<- %s: %s\n", conn.conn.RemoteAddr(), msg);
 				conn.recvFunc(msg);
 			}
 		}
