@@ -1,5 +1,6 @@
 package irc
 
+import "strings"
 import "regexp"
 import "container/vector"
 
@@ -19,19 +20,21 @@ func (msg *Message) String() string {
 	s += msg.Command;
 
 	for i := 0; i < len(msg.Params); i++ {
-		spacer := " ";
-		if i == len(msg.Params) - 1 {
+		param	:= msg.Params[i];
+		spacer	:= " ";
+		if i == len(msg.Params) - 1 && strings.Index(param, " ") != -1 {
 			spacer = " :"
 		}
-		s += spacer + msg.Params[i];
+		s += spacer + param;
 	}
 
 	return s;
 }
 
+var re, _ = regexp.Compile("^(:[^ ]+ )?([^ ]+)( ?.*)$");
+
 func Parse(line string) *Message {
 	m := &Message{};
-	re, _ := regexp.Compile("^(:[^ ]+ )?([^ ]+)( ?.*)$");
 	matches := re.MatchStrings(line);
 	if len(matches) != 4 {
 		return nil;
@@ -41,7 +44,7 @@ func Parse(line string) *Message {
 	if len(prefix) > 2 {
 		m.Prefix = prefix[1:len(prefix) - 1];
 	}
-	m.Command = command;
+	m.Command = strings.ToUpper(command);
 
 	paramArray := vector.NewStringVector(0);
 	param := "";
@@ -58,6 +61,10 @@ func Parse(line string) *Message {
 		default:
 			param += string(c);
 		}
+	}
+	if param != "" {
+		paramArray.Push(param);
+		param = "";
 	}
 done:
 	m.Params = paramArray.Data();

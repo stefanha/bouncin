@@ -8,24 +8,28 @@ type tcase struct {
 };
 var cases = []tcase {
 	tcase {
-		":prefix command one two :three four",
-		Message{"prefix", "command", []string{"one", "two", "three four"}},
+		":prefix COMMAND one two :three four",
+		Message{"prefix", "COMMAND", []string{"one", "two", "three four"}},
 	},
 	tcase {
-		"command",
-		Message{Command: "command"},
+		"COMMAND",
+		Message{Command: "COMMAND"},
 	},
 	tcase {
-		"command :one",
-		Message{Command: "command", Params: []string{"one"}},
+		"COMMAND one",
+		Message{Command: "COMMAND", Params: []string{"one"}},
 	},
 	tcase {
-		"command one :two",
-		Message{Command: "command", Params: []string{"one", "two"}},
+		"COMMAND one two",
+		Message{Command: "COMMAND", Params: []string{"one", "two"}},
 	},
 	tcase {
-		"com:mand one :two three",
-		Message{Command: "com:mand", Params: []string{"one", "two three"}},
+		"COM:MAND one :two three",
+		Message{Command: "COM:MAND", Params: []string{"one", "two three"}},
+	},
+	tcase {
+		"NICK asdf",
+		Message{Command: "NICK", Params: []string{"asdf"}},
 	},
 };
 
