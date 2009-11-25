@@ -10,6 +10,7 @@ PKGS=\
 		runloop\
 		config\
 		plugins\
+		events\
 		server\
 		client\
 		network\
