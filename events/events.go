@@ -92,3 +92,35 @@ func (chain *Chain) Notify(args ...) {
 		}
 	}
 }
+
+// Chains can be registered globally here.
+var chains = make(map[string] *Chain)
+
+func AddChain(name string, invoke InvokeFunc) {
+	chains[name] = NewChain(name, invoke)
+}
+
+func RemoveChain(name string) {
+	chains[name] = nil, false
+}
+
+func AddHandler(chainName string, name string, prio Priority, fn interface{}) {
+	chain, ok := chains[chainName];
+	if ok {
+		chain.AddHandler(name, prio, fn)
+	}
+}
+
+func RemoveHandler(chainName string, name string) {
+	chain, ok := chains[chainName];
+	if ok {
+		chain.RemoveHandler(name)
+	}
+}
+
+func Notify(name string, args ...) {
+	chain, ok := chains[name];
+	if ok {
+		chain.Notify(args)
+	}
+}
