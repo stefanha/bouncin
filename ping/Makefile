@@ -1,7 +1,7 @@
 include $(GOROOT)/src/Make.$(GOARCH)
 
-TARG=network
+TARG=ping
 GOFILES=\
-	network.go\
+	ping.go\
 
 include ../Make.pkg

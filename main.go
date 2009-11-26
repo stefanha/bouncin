@@ -4,10 +4,12 @@ import (
 	"net";
 	"runloop";
 	"plugins";
-	"network";
+	"core";
 
 	// Plugins are imported so their init() functions are called
 	_ "admin";
+	_ "bouncer";
+	_ "ping";
 )
 
 func main() {
@@ -15,9 +17,11 @@ func main() {
 	listen, _	:= net.ListenTCP("tcp", addr);
 	server, _	:= net.Dial("tcp", "", "chat.freenode.net:6667");
 
-	network.Add("freenode", server, listen);
+	core.AddNetwork("freenode", server, listen);
 
 	plugins.Enable("admin");
+	plugins.Enable("bouncer");
+	plugins.Enable("ping");
 
 	runloop.Run();
 }

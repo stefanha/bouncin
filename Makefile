@@ -11,10 +11,10 @@ PKGS=\
 		config\
 		plugins\
 		events\
-		server\
-		client\
-		network\
+		core\
 		admin\
+		bouncer\
+		ping\
 
 all: $(TARG)
 clean: clean-pkgs

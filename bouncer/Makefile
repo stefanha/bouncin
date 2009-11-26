@@ -1,7 +1,7 @@
 include $(GOROOT)/src/Make.$(GOARCH)
 
-TARG=server
+TARG=bouncer
 GOFILES=\
-	server.go\
+	bouncer.go\
 
 include ../Make.pkg

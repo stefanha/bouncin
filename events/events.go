@@ -2,6 +2,7 @@
 package events
 
 import (
+	"log";
 	"container/vector";
 	"sort";
 )
@@ -97,30 +98,35 @@ func (chain *Chain) Notify(args ...) {
 var chains = make(map[string] *Chain)
 
 func AddChain(name string, invoke InvokeFunc) {
+	log.Stderrf("AddChain chain=%s\n", name);
 	chains[name] = NewChain(name, invoke)
 }
 
 func RemoveChain(name string) {
+	log.Stderrf("RemoveChain chain=%s\n", name);
 	chains[name] = nil, false
 }
 
 func AddHandler(chainName string, name string, prio Priority, fn interface{}) {
 	chain, ok := chains[chainName];
 	if ok {
-		chain.AddHandler(name, prio, fn)
+		log.Stderrf("AddHandler chain=%s name=%s\n", chainName, name);
+		chain.AddHandler(name, prio, fn);
 	}
 }
 
 func RemoveHandler(chainName string, name string) {
 	chain, ok := chains[chainName];
 	if ok {
-		chain.RemoveHandler(name)
+		log.Stderrf("RemoveHandler chain=%s name=%s\n", chainName, name);
+		chain.RemoveHandler(name);
 	}
 }
 
 func Notify(name string, args ...) {
 	chain, ok := chains[name];
 	if ok {
-		chain.Notify(args)
+		log.Stderrf("notify %s\n", name);
+		chain.Notify(args);
 	}
 }
