@@ -126,7 +126,7 @@ func RemoveHandler(chainName string, name string) {
 func Notify(name string, args ...) {
 	chain, ok := chains[name];
 	if ok {
-		log.Stderrf("notify %s\n", name);
+		log.Stderrf("Notify %s\n", name);
 		chain.Notify(args);
 	}
 }

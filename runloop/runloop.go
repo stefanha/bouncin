@@ -6,6 +6,10 @@ func CallLater(f func()) {
 	funcs <- f
 }
 
+func Quit() {
+	CallLater(nil)
+}
+
 func Run() {
 	funcs = make(chan func(), 64);
 	for {
