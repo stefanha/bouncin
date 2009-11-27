@@ -19,8 +19,8 @@ type client struct {
 	realname	string;
 }
 
-// newclient returns a new client for a given network connection.
-func newclient(conn net.Conn, network *Network) *client {
+// newClient returns a new client for a given network connection.
+func newClient(conn net.Conn, network *Network) *client {
 	var c *client;
 
 	recvFunc := func(msg *irc.Message) {
@@ -63,8 +63,8 @@ func (c *client) recvFunc(msg *irc.Message) {
 		return;
 	}
 
-	// The normal code path notifies the RecvFromclient event chain.
-	events.Notify("RecvFromclient", c, msg);
+	// The normal code path notifies the RecvFromClient event chain.
+	events.Notify("RecvFromClient", c, msg);
 }
 
 func (c *client) Network() *Network {
@@ -76,17 +76,17 @@ func (c *client) RemoteAddr() net.Addr {
 }
 
 func (c *client) Send(msg *irc.Message) {
-	events.Notify("SendToclient", c, msg)
+	events.Notify("SendToClient", c, msg)
 }
 
-func sendToclient(conn Conn, msg *irc.Message) events.EventAction {
+func sendToClient(conn Conn, msg *irc.Message) events.EventAction {
 	conn.(*client).conn.Send(msg);
 	return events.EventStop;
 }
 
 func init() {
-	events.AddChain("RecvFromclient", InvokeSendRecv);
-	events.AddChain("SendToclient", InvokeSendRecv);
+	events.AddChain("RecvFromClient", InvokeSendRecv);
+	events.AddChain("SendToClient", InvokeSendRecv);
 
-	events.AddHandler("SendToclient", "client", events.PrioLast, sendToclient);
+	events.AddHandler("SendToClient", "client", events.PrioLast, sendToClient);
 }

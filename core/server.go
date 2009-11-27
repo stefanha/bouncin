@@ -15,8 +15,8 @@ type server struct {
 	network	*Network;
 }
 
-// newserver returns a new server for a given network connection.
-func newserver(conn net.Conn, network *Network) *server {
+// newServer returns a new server for a given network connection.
+func newServer(conn net.Conn, network *Network) *server {
 	var s *server;
 
 	if conn == nil {
@@ -37,7 +37,7 @@ func newserver(conn net.Conn, network *Network) *server {
 }
 
 func (server *server) recvFunc(msg *irc.Message) {
-	events.Notify("RecvFromserver", server, msg)
+	events.Notify("RecvFromServer", server, msg)
 }
 
 func (server *server) errorFunc(err os.Error) {
@@ -53,21 +53,21 @@ func (server *server) Network() *Network {
 	return server.network
 }
 
-// Send transmits a message by notifying SendToserver event chain.
+// Send transmits a message by notifying SendToServer event chain.
 func (server *server) Send(msg *irc.Message) {
-	events.Notify("SendToserver", server, msg)
+	events.Notify("SendToServer", server, msg)
 }
 
-// sendToserver is the last handler in the SendToserver chain.  It performs the
+// sendToServer is the last handler in the SendToServer chain.  It performs the
 // actual irc.Conn.Send() call which causes the message to be transmitted.
-func sendToserver(conn Conn, msg *irc.Message) events.EventAction {
+func sendToServer(conn Conn, msg *irc.Message) events.EventAction {
 	conn.(*server).conn.Send(msg);
 	return events.EventStop;
 }
 
 func init() {
-	events.AddChain("RecvFromserver", InvokeSendRecv);
-	events.AddChain("SendToserver", InvokeSendRecv);
+	events.AddChain("RecvFromServer", InvokeSendRecv);
+	events.AddChain("SendToServer", InvokeSendRecv);
 
-	events.AddHandler("SendToserver", "server", events.PrioLast, sendToserver);
+	events.AddHandler("SendToServer", "server", events.PrioLast, sendToServer);
 }

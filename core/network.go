@@ -31,13 +31,13 @@ func newNetwork(name string, serverConn net.Conn, listen net.Listener) *Network 
 
 	l := newListenConn(listen, accept, error);
 	network = &Network{name: name, clients: list.New(), listen: l};
-	network.server = newserver(serverConn, network);
+	network.server = newServer(serverConn, network);
 	return network;
 }
 
 func (network *Network) addClient(conn net.Conn) {
 	// TODO error handler on client for disconnect
-	client := newclient(conn, network);
+	client := newClient(conn, network);
 	network.clients.PushBack(client);
 	log.Stderrf("client connected from %s\n", conn.RemoteAddr());
 }
