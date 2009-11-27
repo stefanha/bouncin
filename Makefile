@@ -12,6 +12,7 @@ PKGS=\
 		plugins\
 		events\
 		core\
+		commands\
 		admin\
 		bouncer\
 		ping\
