@@ -21,12 +21,10 @@ type command struct {
 }
 
 func sendLines(conn core.Conn, lines []string) {
-	// TODO should we use INFO or something else?
-	// TODO should the real nick be used?
+	network := conn.Network();
 	for _, line := range lines {
-		conn.Send(irc.RplInfo.Message("bouncin", line))
+		network.SendNoticeToClients(line)
 	}
-	conn.Send(irc.RplEndOfInfo.Message("bouncin"));
 }
 
 func (cmd *command) showHelp(conn core.Conn) {

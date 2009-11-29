@@ -42,6 +42,8 @@ func (network *Network) addClient(conn net.Conn) {
 	log.Stderrf("client connected from %s\n", conn.RemoteAddr());
 }
 
+// SendToServer transmits an IRC message to the server.  If the server
+// connection is down then the message is dropped.
 func (network *Network) SendToServer(msg *irc.Message) {
 	// TODO network may be down, but is this the way to handle it?
 	if network.server != nil {
@@ -49,10 +51,17 @@ func (network *Network) SendToServer(msg *irc.Message) {
 	}
 }
 
+// SendToClients transmits an IRC message to all connected clients.
 func (network *Network) SendToClients(msg *irc.Message) {
 	for c := range network.clients.Iter() {
 		c.(*client).Send(msg)
 	}
+}
+
+// SendNoticeToClients transmits an IRC NOTICE message to all connected clients.
+func (network *Network) SendNoticeToClients(line string) {
+	nick := "bouncin"; // TODO use nick
+	network.SendToClients(&irc.Message{Command: "NOTICE", Params: []string{nick, line}});
 }
 
 var networks = make(map[string] *Network);
