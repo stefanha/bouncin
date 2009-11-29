@@ -46,7 +46,7 @@ func Parse(line string) *Message {
 	}
 	m.Command = strings.ToUpper(command);
 
-	paramArray := vector.NewStringVector(0);
+	paramArray := new(vector.StringVector);
 	param := "";
 	for i, c := range params {
 		switch {

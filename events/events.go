@@ -61,7 +61,7 @@ type Chain struct {
 
 // NewChain creates an empty event chain.
 func NewChain(name string, invoke InvokeFunc) *Chain {
-	return &Chain{name, invoke, vector.New(0)}
+	return &Chain{name, invoke, new(vector.Vector)}
 }
 
 // AddHandler inserts a handler into the chain, positioned according to its priority.
