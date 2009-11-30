@@ -23,7 +23,7 @@ type command struct {
 func sendLines(conn core.Conn, lines []string) {
 	network := conn.Network();
 	for _, line := range lines {
-		network.SendNoticeToClients(line)
+		network.SendNoticeToClient(conn, line)
 	}
 }
 

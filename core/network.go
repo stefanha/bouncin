@@ -58,10 +58,10 @@ func (network *Network) SendToClients(msg *irc.Message) {
 	}
 }
 
-// SendNoticeToClients transmits an IRC NOTICE message to all connected clients.
-func (network *Network) SendNoticeToClients(line string) {
+// SendNoticeToClient transmits an IRC NOTICE message to a clients.
+func (network *Network) SendNoticeToClient(conn Conn, line string) {
 	nick := "bouncin"; // TODO use nick
-	network.SendToClients(&irc.Message{Command: "NOTICE", Params: []string{nick, line}});
+	conn.Send(&irc.Message{Command: "NOTICE", Params: []string{nick, line}});
 }
 
 var networks = make(map[string] *Network);
