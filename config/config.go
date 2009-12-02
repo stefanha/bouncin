@@ -4,10 +4,15 @@ package config
 import (
 	"io";
 	"json";
+	"bytes";
+
 	"log";
 )
 
-const CONFIG_FILENAME = ".bouncinrc"
+const (
+	configFilename	= ".bouncinrc";
+	configPerms	= 0600;
+)
 
 // Plugins can keep persistent string settings.
 type PluginData map[string] string;
@@ -37,15 +42,29 @@ func ParseConfig(config string) *Config {
 	var c = &Config{};
 	ok, errtok := json.Unmarshal(config, c);
 	if !ok {
-		log.Exitf("Config syntax error: %s\n", errtok);
+		log.Exitf("Config syntax error: %s\n", errtok)
 	}
 	return c;
 }
 
-func ReadConfig() {
-	content, err := io.ReadFile(CONFIG_FILENAME);
+func ReadConfig() *Config {
+	content, err := io.ReadFile(configFilename);
 	if err != nil {
-		log.Exitf("Can't open config file: %s\n", err);
+		log.Exitf("Can't open config file: %s\n", err)
 	}
-	ParseConfig(string(content));
+	return ParseConfig(string(content));
+}
+
+func WriteConfig(config *Config) {
+	buf := &bytes.Buffer{};
+	err := json.Marshal(buf, *config);
+	if err != nil {
+		log.Exitf("Failed to marshal config file: %s\n", err)
+	}
+
+	// TODO atomic update without truncating file
+	err = io.WriteFile(configFilename, buf.Bytes(), configPerms);
+	if err != nil {
+		log.Exitf("Can't write config file: %s\n", err)
+	}
 }
