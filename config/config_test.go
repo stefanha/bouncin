@@ -27,7 +27,7 @@ var tcases = []tcase {
 	tcase {
 		`{"networks": [{"name": "freenode", "listen": "0.0.0.0:1234", "server": "chat.freenode.net"}]}`,
 		&Config{Networks: []Network{
-			Network{"freenode", "0.0.0.0:1234", "chat.freenode.net"},
+			Network{Name: "freenode", Listen: "0.0.0.0:1234", Server: "chat.freenode.net"},
 		}}
 	},
 }
